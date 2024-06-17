@@ -458,14 +458,34 @@ void LCD_Update(void)
             }
             else
             {
+#if defined(ENABLE_DISPVOICE)
+                static const int part2block[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15 };
+                uint32_t base_addr = (mcu_mk1) ? 0xa1f0 : 0xa210;   // Number of voices currently consumed in each part
+                char lcd_chars[8] = "";
+                int voice_sum = 0;
+
+                for (int i = 0; i < 16; i++)
+                {
+                    voice_sum += MCU_Read(base_addr + i);
+                }
+                sprintf(lcd_chars, "%3d", voice_sum);
+#endif
                 for (int i = 0; i < 3; i++)
                 {
+#if !defined(ENABLE_DISPVOICE)
                     uint8_t ch = LCD_Data[0 + i];
+#else
+                    uint8_t ch = lcd_chars[i];
+#endif
                     LCD_FontRenderStandard(11, 34 + i * 35, ch);
                 }
                 for (int i = 0; i < 16; i++)
                 {
+#if !defined(ENABLE_DISPVOICE)
                     uint8_t ch = LCD_Data[3 + i];
+#else
+                    uint8_t ch = "0123456789abcdefghijklmnopqrs"[MCU_Read(base_addr + part2block[i])];
+#endif
                     LCD_FontRenderStandard(11, 153 + i * 35, ch);
                 }
                 for (int i = 0; i < 3; i++)
