@@ -521,6 +521,23 @@ void LCD_Update(void)
 
                 LCD_FontRenderLR(LCD_Data[58]);
 
+#if defined(ENABLE_DISPVOICE)
+                memset(LCD_CG, 0, sizeof(LCD_CG));
+                for (int i = 0; i < 16; i++)
+                {
+                    uint8_t *bar_upper = &LCD_CG[(i / 5 * 2)     * 8];
+                    uint8_t *bar_lower = &LCD_CG[(i / 5 * 2 + 1) * 8];
+                    int voice_num = MCU_Read(base_addr + part2block[i]);
+                    uint32_t bit_pattern = (1 << voice_num) - 1;
+
+                    for (int j = 0; j < 8; j++)
+                    {
+                        int x = 4 - i % 5;
+                        bar_upper[7 - j % 8] |= (((bit_pattern & (1 << (j + 8))) ? 1 : 0) << x) ^ (((bit_pattern & (1 << (j + 24))) ? 1 : 0) << x);
+                        bar_lower[7 - j % 8] |= (((bit_pattern & (1 << (j + 0))) ? 1 : 0) << x) ^ (((bit_pattern & (1 << (j + 16))) ? 1 : 0) << x);
+                    }
+                }
+#endif
                 for (int i = 0; i < 2; i++)
                 {
                     for (int j = 0; j < 4; j++)
