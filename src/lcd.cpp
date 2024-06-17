@@ -407,6 +407,7 @@ void LCD_FontRenderLR(uint8_t ch)
     }
 }
 
+#define ENABLE_DISPVOICE
 void LCD_Update(void)
 {
     if (!lcd_init)
