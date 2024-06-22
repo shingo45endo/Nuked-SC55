@@ -462,13 +462,9 @@ void LCD_Update(void)
 #if defined(ENABLE_DISPVOICE)
                 static const int part2block[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 10, 11, 12, 13, 14, 15 };
                 uint32_t base_addr = (mcu_mk1) ? 0xa1f0 : 0xa210;   // Number of voices currently consumed in each part
+                int voice_sum = (mcu_mk1) ? 24 - MCU_Read(0xa3c1) : 28 - MCU_Read(0xa42d);
                 char lcd_chars[8] = "";
-                int voice_sum = 0;
 
-                for (int i = 0; i < 16; i++)
-                {
-                    voice_sum += MCU_Read(base_addr + i);
-                }
                 sprintf(lcd_chars, "%3d", voice_sum);
 #endif
                 for (int i = 0; i < 3; i++)
