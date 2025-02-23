@@ -328,6 +328,7 @@ void MCU_DeviceWrite(uint32_t address, uint8_t data)
     case DEV_P7DDR:
         break;
     case DEV_SCR:
+        MCU_Interrupt_SetRequest(INTERRUPT_SOURCE_UART_TX, (data & 0x80) != 0 && (dev_register[DEV_SSR] & 0x80) != 0);
         break;
     case DEV_WCR:
         break;
