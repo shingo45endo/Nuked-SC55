@@ -417,7 +417,7 @@ void MCU_DeviceWrite(uint32_t address, uint8_t data)
         {
             dev_register[address] &= ~0x10;
         }
-        break;
+        return;
     }
     default:
         address += 0;
