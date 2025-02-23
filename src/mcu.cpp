@@ -513,7 +513,7 @@ void MCU_DeviceReset(void)
     // dev_register[0x00] = 0x03;
     // dev_register[0x7c] = 0x87;
     dev_register[DEV_RAME] = 0x80;
-    dev_register[DEV_SSR] = 0x80;
+    dev_register[DEV_SSR] = 0x87;
 }
 
 void MCU_UpdateAnalog(uint64_t cycles)
